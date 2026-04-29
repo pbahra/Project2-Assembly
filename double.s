@@ -18,18 +18,18 @@ out_buf:    .skip 32
 .globl _start
 
 _start:
-    #------------------------------------------
+    
     # Step 1: Read number from stdin
-    #------------------------------------------
+    
     movl    $3, %eax            
     movl    $0, %ebx            
     leal    input_buf, %ecx     
     movl    $32, %edx           
     int     $0x80               
 
-    #------------------------------------------
+   
     # Step 2: Convert ASCII string -> integer
-    #------------------------------------------
+    
     leal    input_buf, %esi     
     xorl    %eax, %eax          
     xorl    %ebx, %ebx          
@@ -48,14 +48,14 @@ parse_loop:
 
 parse_done:
 
-    #------------------------------------------
+    
     # Step 3: Double the number
-    #------------------------------------------
+    
     sall    $1, %eax            
 
-    #------------------------------------------
+    
     # Step 4: Convert integer -> ASCII string
-    #------------------------------------------
+    
     leal    out_buf, %edi       
     movl    %edi, %esi          
     movl    $10, %ecx           
@@ -96,36 +96,36 @@ reverse_loop:
 
 reverse_done:
 
-    #------------------------------------------
+    
     # Step 5: Print "The double is: "
-    #------------------------------------------
+    
     movl    $4, %eax            
     movl    $1, %ebx            
     leal    prompt, %ecx        
     movl    $prompt_len, %edx   # length of prompt
     int     $0x80               
 
-    #------------------------------------------
+    
     # Step 6: Print the doubled number
-    #------------------------------------------
+    
     movl    $4, %eax            
     movl    $1, %ebx            
     leal    out_buf, %ecx       
     movl    %ebp, %edx          # number of digits
     int     $0x80               
 
-    #------------------------------------------
+    
     # Step 7: Print newline
-    #------------------------------------------
+   
     movl    $4, %eax
     movl    $1, %ebx
     leal    newline, %ecx
     movl    $1, %edx
     int     $0x80
 
-    #------------------------------------------
+   
     # Step 8: Exit cleanly
-    #------------------------------------------
+   
     movl    $1, %eax            
     xorl    %ebx, %ebx          
     int     $0x80               
