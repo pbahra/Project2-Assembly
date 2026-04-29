@@ -21,33 +21,32 @@ _start:
     #------------------------------------------
     # Step 1: Read number from stdin
     #------------------------------------------
-    movl    $3, %eax            # syscall number: read
-    movl    $0, %ebx            # fd: stdin (0)
-    leal    input_buf, %ecx     # address of input buffer
-    movl    $32, %edx           # max bytes to read
-    int     $0x80               # invoke syscall
+    movl    $3, %eax            
+    movl    $0, %ebx            
+    leal    input_buf, %ecx     
+    movl    $32, %edx           
+    int     $0x80               
 
     #------------------------------------------
     # Step 2: Convert ASCII string -> integer
     #------------------------------------------
-    leal    input_buf, %esi     # esi = pointer to input buffer
-    xorl    %eax, %eax          # eax = 0 
-    xorl    %ebx, %ebx          # ebx = current character
+    leal    input_buf, %esi     
+    xorl    %eax, %eax          
+    xorl    %ebx, %ebx          
 
 parse_loop:
-    movzbl  (%esi), %ebx        # load next byte into ebx (zero extended)
+    movzbl  (%esi), %ebx        
     cmpl    $'0', %ebx          
     jl      parse_done          
     cmpl    $'9', %ebx          
     jg      parse_done          
-    subl    $'0', %ebx          # convert ASCII digit -> integer
+    subl    $'0', %ebx          # convertss ASCII digit -> integer
     imull   $10, %eax           
     addl    %ebx, %eax          
     incl    %esi                
     jmp     parse_loop
 
 parse_done:
-    # eax now holds the parsed integer
 
     #------------------------------------------
     # Step 3: Double the number
@@ -78,17 +77,16 @@ int_to_str_loop:
     addl    $'0', %edx          
     movb    %dl, (%edi)         
     incl    %edi
-    incl    %ebp                # increment digit count
+    incl    %ebp                
     jmp     int_to_str_loop
 
 reverse_str:
-    # digits are backwards in out_buf, reverse them in place
     leal    -1(%edi), %edi      
 
 reverse_loop:
     cmpl    %esi, %edi
-    jle     reverse_done        # stop when pointers meet
-    movb    (%esi), %al         # swap *esi and *edi
+    jle     reverse_done        # Stop when pointer meet
+    movb    (%esi), %al         
     movb    (%edi), %bl
     movb    %bl, (%esi)
     movb    %al, (%edi)
@@ -101,7 +99,7 @@ reverse_done:
     #------------------------------------------
     # Step 5: Print "The double is: "
     #------------------------------------------
-    movl    $4, %eax            # syscall number: write
+    movl    $4, %eax            
     movl    $1, %ebx            
     leal    prompt, %ecx        
     movl    $prompt_len, %edx   # length of prompt
@@ -110,7 +108,7 @@ reverse_done:
     #------------------------------------------
     # Step 6: Print the doubled number
     #------------------------------------------
-    movl    $4, %eax            # syscall number: write
+    movl    $4, %eax            
     movl    $1, %ebx            
     leal    out_buf, %ecx       
     movl    %ebp, %edx          # number of digits
@@ -128,6 +126,6 @@ reverse_done:
     #------------------------------------------
     # Step 8: Exit cleanly
     #------------------------------------------
-    movl    $1, %eax            # syscall number: exit
-    xorl    %ebx, %ebx          # exit code 0
+    movl    $1, %eax            
+    xorl    %ebx, %ebx          
     int     $0x80               
