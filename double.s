@@ -2,9 +2,8 @@
 # Pavan Bahra, CMSC313
 # Reads a number from stdin, doubles it, prints "The double is: <result>"
 # 32-bit GAS assembly for Linux x86
-# Assemble: as -o double.o double.s
-# Link:     ld -o double double.o
-# Run:      ./double then type a number
+# Compile: gcc -nostdlib -no-pie double.s -o double
+# Run: ./double then type a number
 
 .section .data
     prompt:     .asciz "The double is: "   # output 
